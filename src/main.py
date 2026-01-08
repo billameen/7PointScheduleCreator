@@ -129,7 +129,13 @@ def get_event_data() -> List[Event]:
     return event_list
 
 
-if __name__ == "__main__":
+def generate_tasks(event):
+    """
+    Based on an event, generates a list of associated tasks
+    :return:
+    """
+
+def get_all_tasks():
     task_list = {
         "7:00 AM": [],
         "7:30 AM": [],
@@ -168,4 +174,8 @@ if __name__ == "__main__":
         "12:00 AM": [],
     }
 
+    return task_list
+
+
+if __name__ == "__main__":
     get_event_data()
