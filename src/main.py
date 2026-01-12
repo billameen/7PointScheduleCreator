@@ -16,6 +16,15 @@ class Event:
     error: Optional[str] = None
 
 
+# This dataclass will store all information pertaining to a task
+@dataclass
+class Task:
+    time: Optional[str] = None
+    room: Optional[str] = None
+    type: Optional[str] = None
+    error: Optional[str] = None
+
+
 # Expected input: Med Deli Catering Meeting - Talley Student Union - 3220 - (Conference, 5, act. 0)
 # Expected output: Conference, 5
 def get_setup_desc(desc: str) -> str:
@@ -53,6 +62,20 @@ def get_event_time(desc: str) -> Tuple[str, str]:
     return start_time, end_time
 
 
+# expected format for access time: <!-- react-text: 104 -->0<!-- /react-text --><!-- react-text: 105 -->&nbsp;-&nbsp;<!-- /react-text --><!-- react-text: 106 -->Access Time<!-- /react-text --><p class="preWrap indent">Access at 10:30am</p>
+def get_access_time(page):
+    try:
+        access_time_html = page.get_by_text("Access Time").inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
+        print("access_time_html", access_time_html)
+        if (access_time_html is None) or (access_time_html.strip() == ''):
+            raise Exception(f'Event access time is missing')
+
+        return access_time_html
+
+    except Exception as e:
+        raise e
+
+
 def process_event_info(page):
     """
     Extract event info from the 7PointOps Event Details HTML page.
@@ -69,12 +92,12 @@ def process_event_info(page):
         room_num = page.locator(".roomDesc").inner_text()
         header_info = page.locator("h3").inner_text()
         time_info = get_event_time(page.locator(".groupDetails>dl").first.inner_html())
-        # access_time = page.get_by_text("Event Timeline").inner_text(timeout=1000)
+        access_time = get_access_time(page)
 
-        print("room num:", room_num)
-        print("head info:", header_info)
-        print("start time", time_info[0])
-        print("endtime", time_info[1])
+        # print("room num:", room_num)
+        # print("head info:", header_info)
+        # print("start time", time_info[0])
+        # print("end time", time_info[1])
         # print("access time", time_info[2])
         # print("error")
 
@@ -82,8 +105,14 @@ def process_event_info(page):
         event.setup_desc = get_setup_desc(header_info)
         event.start_time = time_info[0]
         event.end_time = time_info[1]
+        event.access_time = access_time
 
-        page.wait_for_timeout(3000)
+        print("room: ", event.room)
+        print("setup desc: ", event.setup_desc)
+        print("start time: ", event.start_time)
+        print("end time: ", event.end_time)
+        print("access time: ", event.access_time)
+        print("error: ", event.error)
 
         return event
 
@@ -129,11 +158,31 @@ def get_event_data() -> List[Event]:
     return event_list
 
 
+# Event example:    Event(room, setup_desc, start_time, end_time, access_time, error)
+#                   Event('4210', )
+
 def generate_tasks(event):
     """
     Based on an event, generates a list of associated tasks
     :return:
     """
+
+    task_list = []
+
+
+
+    # Unlock
+
+    # Greet
+    # Reset
+    # Lock
+
+    # Other
+
+
+
+
+
 
 def get_all_tasks():
     task_list = {
