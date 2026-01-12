@@ -1,8 +1,11 @@
 import os
+import re
 from dataclasses import dataclass
 from typing import Optional, Tuple, List
 from dotenv import load_dotenv, find_dotenv
 from playwright.sync_api import sync_playwright
+
+time_pattern = re.compile(r'\b\d{1,2}:\d{2}\s?(?:am|pm)\b', re.IGNORECASE)
 
 
 # This dataclass will store all information pertaining to an event
@@ -66,11 +69,13 @@ def get_event_time(desc: str) -> Tuple[str, str]:
 def get_access_time(page):
     try:
         access_time_html = page.get_by_text("Access Time").inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
-        print("access_time_html", access_time_html)
+        # print("access_time_html", access_time_html)
+        access_time = re.search(time_pattern, access_time_html).group()
+        # print("Access time:", access_time)
         if (access_time_html is None) or (access_time_html.strip() == ''):
             raise Exception(f'Event access time is missing')
 
-        return access_time_html
+        return access_time
 
     except Exception as e:
         raise e
