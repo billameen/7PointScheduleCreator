@@ -5,8 +5,10 @@ from typing import Optional, Tuple, List
 from dotenv import load_dotenv, find_dotenv
 from playwright.sync_api import sync_playwright
 
-time_pattern = re.compile(r'\b\d{1,2}:\d{2}\s?(?:am|pm)\b', re.IGNORECASE)
-
+time_pattern = re.compile(
+    r'\b\d{1,2}(?::\d{2})?\s?(?:a\.?m\.?|p\.?m\.?)\b',
+    re.IGNORECASE
+)
 
 # This dataclass will store all information pertaining to an event
 @dataclass
@@ -28,6 +30,51 @@ class Task:
     error: Optional[str] = None
 
 
+
+def set_event_room_num(event, page):
+    if page.locator(".roomDesc").count() > 0:
+        room_num = page.locator(".roomDesc").inner_text()
+        event.room = room_num
+        print("room: ", event.room)
+    else:
+        event.room = None
+        event.error = "No room number"
+
+
+def set_event_setup_desc(event, page):
+    if page.locator("h3").count() > 0:
+        header_info = page.locator("h3").inner_text()
+        event.setup_desc = get_setup_desc(header_info)
+        print("setup desc: ", event.setup_desc)
+    else:
+        event.setup_desc = None
+        event.error = "No setup description"
+
+
+def set_event_time(event, page):
+    if page.locator(".groupDetails>dl").count() > 0:
+        time_info = get_event_time(page.locator(".groupDetails>dl").first.inner_html())
+        event.start_time = time_info[0]
+        print("start time: ", event.start_time)
+        event.end_time = time_info[1]
+        print("end time: ", event.end_time)
+    else:
+        event.start_time = None
+        event.end_time = None
+        event.error = "No start time or end time"
+
+
+def set_event_access_time(event, page):
+    if page.get_by_text('Access Time').count() > 0:
+        access_time = get_access_time(page)
+        event.access_time = access_time
+        print("access time: ", event.access_time)
+    else:
+        event.access_time = None
+        event.error = "No access time"
+
+
+
 # Expected input: Med Deli Catering Meeting - Talley Student Union - 3220 - (Conference, 5, act. 0)
 # Expected output: Conference, 5
 def get_setup_desc(desc: str) -> str:
@@ -36,10 +83,6 @@ def get_setup_desc(desc: str) -> str:
     :param desc: the heading (<h3>) of the event description
     """
     setup = desc.split('(')[1].split(', act.')[0].strip()
-
-    if len(setup) < 6:
-        raise Exception(f'Invalid setup description: {desc}')
-
     return setup
 
 
@@ -57,10 +100,8 @@ def get_event_time(desc: str) -> Tuple[str, str]:
     start_time = start_time.split('-->')[1].split('<!--')[0].strip()
     end_time = end_time.split('-->')[1].split('<!--')[0].strip()
 
-    if start_time == '':
-        raise Exception(f'Event start time is missing')
-    if end_time == '':
-        raise Exception(f'Event end time is missing')
+    assert re.fullmatch(time_pattern, start_time), f"Invalid start time: {start_time}"
+    assert re.fullmatch(time_pattern, end_time), f"Invalid end time: {end_time}"
 
     return start_time, end_time
 
@@ -69,16 +110,15 @@ def get_event_time(desc: str) -> Tuple[str, str]:
 def get_access_time(page):
     try:
         access_time_html = page.get_by_text("Access Time").inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
-        # print("access_time_html", access_time_html)
         access_time = re.search(time_pattern, access_time_html).group()
-        # print("Access time:", access_time)
-        if (access_time_html is None) or (access_time_html.strip() == ''):
-            raise Exception(f'Event access time is missing')
+
+        assert access_time_html and access_time_html.strip() != '', f'Invalid event access time: {access_time_html}'
 
         return access_time
 
     except Exception as e:
         raise e
+
 
 
 def process_event_info(page):
@@ -93,37 +133,15 @@ def process_event_info(page):
         # make sure page has loaded
         page.locator("#ngplus-overlay-container").wait_for(state="hidden")
 
-        # access the info inside the event
-        room_num = page.locator(".roomDesc").inner_text()
-        header_info = page.locator("h3").inner_text()
-        time_info = get_event_time(page.locator(".groupDetails>dl").first.inner_html())
-        access_time = get_access_time(page)
-
-        # print("room num:", room_num)
-        # print("head info:", header_info)
-        # print("start time", time_info[0])
-        # print("end time", time_info[1])
-        # print("access time", time_info[2])
-        # print("error")
-
-        event.room = room_num
-        event.setup_desc = get_setup_desc(header_info)
-        event.start_time = time_info[0]
-        event.end_time = time_info[1]
-        event.access_time = access_time
-
-        print("room: ", event.room)
-        print("setup desc: ", event.setup_desc)
-        print("start time: ", event.start_time)
-        print("end time: ", event.end_time)
-        print("access time: ", event.access_time)
-        print("error: ", event.error)
+        set_event_room_num(event, page)
+        set_event_setup_desc(event, page)
+        set_event_time(event, page)
+        set_event_access_time(event, page)
 
         return event
 
     except Exception as e:
-        event.error = str(e)
-        return event
+        print("There was an error processing an event: ", e)
 
 
 def get_event_data() -> List[Event]:
@@ -151,12 +169,16 @@ def get_event_data() -> List[Event]:
         # navigate to Book
         page.goto("https://www.7pointops.com/book")
         page.wait_for_url("https://www.7pointops.com/book")
-        page.locator("#locationColumnWrapper").wait_for(timeout=30000)
+        page.wait_for_selector(".eventBarText")
 
+        print("Number of events:", page.locator(".eventBarText").count())
+        i = 0
         for event in page.locator(".eventBarText").all():
+            print(f"----------------- {i} -----------------")
             event.click() # click to see event details
             event_list.append(process_event_info(page)) # scrape the relevant event info and save it
             page.get_by_role("button").get_by_text("×").click() # exit the event details page
+            i += 1
 
         browser.close()
 
@@ -165,7 +187,6 @@ def get_event_data() -> List[Event]:
 
 # Event example:    Event(room, setup_desc, start_time, end_time, access_time, error)
 #                   Event('4210', )
-
 def generate_tasks(event):
     """
     Based on an event, generates a list of associated tasks
@@ -233,3 +254,10 @@ def get_all_tasks():
 
 if __name__ == "__main__":
     get_event_data()
+
+
+
+
+
+
+
