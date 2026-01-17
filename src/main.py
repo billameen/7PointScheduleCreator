@@ -265,16 +265,17 @@ def get_schedule() -> List[Event]:
         page.goto("https://www.7pointops.com/login")
         page.locator("#userName").fill(os.getenv("USERNAME"))
         page.locator("#password").fill(os.getenv("PASSWORD"))
-        page.click("#loginButton")
-        page.wait_for_url("https://www.7pointops.com")
 
-        # navigate to Book
+        with page.expect_navigation():
+            page.click("#loginButton")
+
+        page.wait_for_load_state("networkidle")
         page.goto("https://www.7pointops.com/book")
-        page.wait_for_url("https://www.7pointops.com/book")
-        page.wait_for_selector(".eventBarText")
+        page.wait_for_selector(".eventBarText", timeout=15000)
 
         print("Number of events:", page.locator(".eventBarText").count())
         i = 0
+
         for event in page.locator(".eventBarText").all():
             print(f"----------------- {i} -----------------")
             event.click() # click to see event details
