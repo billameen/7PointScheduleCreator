@@ -122,6 +122,7 @@ def set_event_setup_desc(event, page):
     else:
         event.setup_desc = None
         event.error = "No setup description"
+        print("setup desc: None")
 
 
 def set_event_time(event, page):
@@ -146,6 +147,8 @@ def set_event_access_time(event, page):
     else:
         event.access_time = None
         event.error = "No access time"
+        print("access time: None")
+
 
 
 # Expected input: Med Deli Catering Meeting - Talley Student Union - 3220 - (Conference, 5, act. 0)
@@ -190,6 +193,25 @@ def get_access_time(page):
         raise e
 
 
+def calc_unlock_time(event):
+
+    if event.access_time is not None:
+        t = parse_time_12h(event.access_time)
+        rounded_t = (
+            t.start_of("hour")
+            .add(minutes=(t.minute // 30) * 30)
+        )
+        rounded_t.subtract(minutes=30)
+        return rounded_t.format("h:mm A")
+
+    else:
+        t = parse_time_12h(event.start_time)
+        rounded_t = (
+            t.start_of("hour")
+            .add(minutes=(t.minute // 30) * 30)
+        )
+        rounded_t.subtract(minutes=30)
+        return rounded_t.format("h:mm A")
 # def get_previous_setup(page):
 
 
@@ -275,24 +297,15 @@ def generate_event_tasks(event):
     lock_task = Task()
 
     # Unlock
-    if event.access_time is not None:
-        unlock_task.time = event.access_time
-        unlock_task.room = event.room
-        unlock_task.type = "Unlock"
-    else:
-        t = parse_time_12h(event.start_time)
-        rounded_t = (
-            t.start_of("hour")
-            .add(minutes=(t.minute // 30) * 30)
-        )
-        unlock_task.time = rounded_t.format("h:mm A")
-        unlock_task.room = event.room
+    unlock_task.time = calc_unlock_time(event)
+    unlock_task.room = event.room
+    unlock_task.type = "Unlock"
 
 
     # Greet
     greet_task.time = event.start_time
     greet_task.room = event.room
-    greet_task.type = "Unlock"
+    greet_task.type = "Greet"
 
     # Reset
     reset_task.time = event.end_time
