@@ -258,7 +258,7 @@ def get_schedule() -> List[Event]:
     load_dotenv(dotenv_path)
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
 
         # login
@@ -270,8 +270,9 @@ def get_schedule() -> List[Event]:
             page.click("#loginButton")
 
         page.wait_for_load_state("networkidle")
+        page.wait_for_timeout(3000)
         page.goto("https://www.7pointops.com/book")
-        page.wait_for_selector(".eventBarText", timeout=15000)
+        page.wait_for_selector(".eventBarText", timeout=5000)
 
         print("Number of events:", page.locator(".eventBarText").count())
         i = 0
@@ -343,4 +344,4 @@ def get_all_tasks():
 
 if __name__ == "__main__":
     get_schedule()
-    print("tasks:\n\n", task_list)
+    
