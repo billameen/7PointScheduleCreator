@@ -1,3 +1,4 @@
+import json
 import os
 import re
 from dataclasses import dataclass
@@ -353,10 +354,13 @@ def generate_event_tasks(event):
 
 
 def write_tasks():
-    pass
+    global task_list
+    json.dump(task_list, open("tasks.json", "w"), default=lambda o: o.__dict__,  indent=4)
+
 
 if __name__ == "__main__":
-    # get_schedule()
+    get_schedule()
+    write_tasks()
     html_path = Path(__file__).parent / "schedule.html"
     url = html_path.resolve().as_uri()
     webbrowser.get("firefox").open(url)
