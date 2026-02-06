@@ -3,18 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>7 Point Ops Schedule</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">.</script>
-    <script defer src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script type="module" src="script.js" defer></script>
+
 
 </head>
 <body class="bg-slate-950">
-
-    <template id="task-item-template">
-        <div class="task-item bg-blue-400/50 m-1 px-2 rounded-sm border-2 border-blue-400">
-            <a class="room-number font-bold">asdf</a> -
-            <a class="setup-desc">asdfasdf</a>
-        </div>
-    </template>
 
     <div class="text-stone-100">
         <div class="m-8">
@@ -29,335 +23,343 @@
                 </div>
                 <div id="5:00 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">5:00 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="task-items flex-row"></div></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="5:30 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">5:30 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="6:00 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">6:00 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="6:30 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">6:30 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="7:00 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">7:00 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="7:30 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">7:30 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="8:00 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">8:00 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="8:30 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">8:30 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="9:00 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">9:00 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="9:30 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">9:30 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="10:00 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">10:00 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="10:30 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">10:30 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="11:00 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">11:00 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="11:30 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">11:30 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="12:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">12:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="12:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">12:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="1:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">1:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="1:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">1:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="2:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">2:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="2:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">2:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="3:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">3:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="3:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">3:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="4:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">4:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="4:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">4:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="5:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">5:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="5:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">5:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="6:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">6:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="6:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">6:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="7:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">7:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="7:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">7:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="8:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">8:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="8:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">8:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="9:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">9:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="9:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">9:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="10:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">10:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="10:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">10:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="11:00 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">11:00 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="11:30 PM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">11:30 PM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="12:00 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">12:00 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="12:30 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">12:30 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
                 <div id="1:00 AM" class="time_slot contents">
                     <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">1:00 AM</div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"></div>
-                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
             </div>
         </div>
     </div>
 
 </body>
+
+<template id="task-item-template">
+    <div class="task-item bg-blue-400/50 m-1 px-2 rounded-sm border-2 border-blue-400">
+        <a class="room-number font-bold"></a>
+        <a class="setup-desc"></a>
+    </div>
+</template>
+
 </html>
