@@ -9,6 +9,9 @@ import pendulum
 import webbrowser
 from pathlib import Path
 
+html_path = Path(__file__).parent / "schedule.html"
+irrelevant_rooms_path = Path(__file__).parent / "irrelevant_rooms.txt"
+
 task_list = {
     "5:00 AM": [],
     "5:30 AM": [],
@@ -220,7 +223,21 @@ def calc_unlock_time(event):
         )
         rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
-# def get_previous_setup(page):
+
+def read_irrelevant_rooms():
+    f = open(irrelevant_rooms_path, "r")
+    contents = f.read()
+    contents = contents.strip().split(',\n')
+    f.close()
+    return contents
+
+def filter_events(event_list):
+    irrelevant_rooms = read_irrelevant_rooms()
+
+    for event in event_list:
+        if event.room_id in irrelevant_rooms:
+            event_list.remove(event)
+
 
 def round_event_times(event):
     if event.start_time is not None:
@@ -296,7 +313,8 @@ def get_schedule() -> List[Event]:
             print(f"----------------- {i} -----------------")
             event.click() # click to see event details
             event_info = process_event_info(page) # scrape the relevant event info and save it
-            generate_event_tasks(event_info)
+            filter_events(event_info) # Filter out events that OPS do not care about
+            generate_event_tasks(event_info) # create each task associated with an event
             page.get_by_role("button").get_by_text("×").click() # exit the event details page
             i += 1
 
@@ -359,8 +377,10 @@ def write_tasks():
 
 
 if __name__ == "__main__":
-    get_schedule()
-    write_tasks()
-    html_path = Path(__file__).parent / "schedule.html"
-    url = html_path.resolve().as_uri()
-    webbrowser.get("firefox").open(url)
+    # get_schedule()
+    # write_tasks()
+    # html_path = Path(__file__).parent / "schedule.html"
+    # url = html_path.resolve().as_uri()
+    # webbrowser.get("firefox").open(url)
+
+    read_irrelevant_rooms()
