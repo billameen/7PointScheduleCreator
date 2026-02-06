@@ -5,7 +5,8 @@ from typing import Optional, Tuple, List
 from dotenv import load_dotenv, find_dotenv
 from playwright.sync_api import sync_playwright
 import pendulum
-
+import webbrowser
+from pathlib import Path
 
 task_list = {
     "5:00 AM": [],
@@ -220,7 +221,19 @@ def calc_unlock_time(event):
         return rounded_t.format("h:mm A")
 # def get_previous_setup(page):
 
-
+def round_event_times(event):
+    if event.start_time is not None:
+        t = parse_time_12h(event.start_time)
+        rounded_t = (t.start_of("hour").add(minutes=(t.minute // 30) * 30)).format("h:mm A")
+        event.start_time = rounded_t
+    if event.access_time is not None:
+        t = parse_time_12h(event.access_time)
+        rounded_t = (t.start_of("hour").add(minutes=(t.minute // 30) * 30)).format("h:mm A")
+        event.access_time = rounded_t
+    if event.end_time is not None:
+        t = parse_time_12h(event.end_time)
+        rounded_t = (t.start_of("hour").add(minutes=-(-t.minute // 30) * 30)).format("h:mm A")
+        event.end_time = rounded_t
 
 
 def process_event_info(page):
@@ -239,6 +252,7 @@ def process_event_info(page):
         set_event_setup_desc(event, page)
         set_event_time(event, page)
         set_event_access_time(event, page)
+        round_event_times(event)
 
         return event
 
@@ -338,10 +352,11 @@ def generate_event_tasks(event):
     task_list[lock_task.time].append(lock_task)
 
 
-def get_all_tasks():
-    return task_list
-
+def write_tasks():
+    pass
 
 if __name__ == "__main__":
-    get_schedule()
-    
+    # get_schedule()
+    html_path = Path(__file__).parent / "schedule.html"
+    url = html_path.resolve().as_uri()
+    webbrowser.get("firefox").open(url)
