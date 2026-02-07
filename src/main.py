@@ -229,6 +229,7 @@ def calc_unlock_time(event):
         rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
 
+
 def read_irrelevant_rooms():
     f = open(irrelevant_rooms_path, "r")
     contents = f.read()
@@ -236,12 +237,6 @@ def read_irrelevant_rooms():
     f.close()
     return contents
 
-def filter_events(event_list):
-    irrelevant_rooms = read_irrelevant_rooms()
-
-    for event in event_list:
-        if event.room in irrelevant_rooms:
-            event_list.remove(event)
 
 
 def round_event_times(event):
@@ -277,61 +272,17 @@ def process_event_info(page):
         set_event_access_time(event, page)
         round_event_times(event)
 
+
+
         return event
 
     except Exception as e:
         print("There was an error processing an event: ", e)
 
 
-def get_schedule() -> List[Event]:
-    """
-    Scan 7PointOps Book page and retrieve data for each event happening on the current day
-    :return: a list of events
-    """
-    event_list = []
-
-    # load username and password
-    dotenv_path = find_dotenv()
-    load_dotenv(dotenv_path)
-
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-
-        # login
-        page.goto("https://www.7pointops.com/login")
-        page.locator("#userName").fill(os.getenv("USERNAME"))
-        page.locator("#password").fill(os.getenv("PASSWORD"))
-
-        with page.expect_navigation():
-            page.click("#loginButton")
-
-        page.wait_for_load_state("networkidle")
-        page.wait_for_timeout(3000)
-        page.goto("https://www.7pointops.com/book")
-        page.wait_for_selector(".eventBarText", timeout=5000)
-
-        print("Number of events:", page.locator(".eventBarText").count())
-        i = 0
-
-        for event in page.locator(".eventBarText").all():
-            print(f"----------------- {i} -----------------")
-            event.click() # click to see event details
-            event_info = process_event_info(page) # scrape the relevant event info and save it
-            generate_event_tasks(event_info) # create each task associated with an event
-            page.get_by_role("button").get_by_text("×").click() # exit the event details page
-            i += 1
-
-        filter_events(event_list)  # Filter out events that OPS do not care about
-
-        browser.close()
-
-    return event_list
-
-
 # Event example:    Event(room, setup_desc, start_time, end_time, access_time, error)
 #                   Event('4265', 'Conference, 12', '6:30 PM', '8:00 PM', '6pm', None)
-def generate_event_tasks(event):
+def generate_event_tasks(event, irrelevant_rooms):
     """
     Based on an event, generates a list of associated tasks
     :return:
@@ -340,6 +291,8 @@ def generate_event_tasks(event):
         return
     else:
         if event.room is None or event.start_time is None or event.end_time is None:
+            return
+        if event.room in irrelevant_rooms:
             return
 
     global task_list
@@ -375,6 +328,52 @@ def generate_event_tasks(event):
     task_list[greet_task.time].append(greet_task)
     task_list[reset_task.time].append(reset_task)
     task_list[lock_task.time].append(lock_task)
+
+
+def get_schedule() -> List[Event]:
+    """
+    Scan 7PointOps Book page and retrieve data for each event happening on the current day
+    :return: a list of events
+    """
+    event_list = []
+
+    # load username and password
+    dotenv_path = find_dotenv()
+    load_dotenv(dotenv_path)
+
+    irrelevant_rooms = read_irrelevant_rooms() # get all the rooms OPS don't care about
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+
+        # login
+        page.goto("https://www.7pointops.com/login")
+        page.locator("#userName").fill(os.getenv("USERNAME"))
+        page.locator("#password").fill(os.getenv("PASSWORD"))
+
+        with page.expect_navigation():
+            page.click("#loginButton")
+
+        page.wait_for_load_state("networkidle")
+        page.wait_for_timeout(3000)
+        page.goto("https://www.7pointops.com/book")
+        page.wait_for_selector(".eventBarText", timeout=5000)
+
+        print("Number of events:", page.locator(".eventBarText").count())
+        i = 0
+
+        for event in page.locator(".eventBarText").all():
+            print(f"----------------- {i} -----------------")
+            event.click() # click to see event details
+            event_info = process_event_info(page) # scrape the relevant event info and save it
+            generate_event_tasks(event_info, irrelevant_rooms) # create each task associated with an event
+            page.get_by_role("button").get_by_text("×").click() # exit the event details page
+            i += 1
+
+        browser.close()
+
+    return event_list
 
 
 def write_tasks():
