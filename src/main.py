@@ -6,10 +6,11 @@ from typing import Optional, Tuple, List
 from dotenv import load_dotenv, find_dotenv
 from playwright.sync_api import sync_playwright
 import pendulum
-import webbrowser
 from pathlib import Path
 
-html_path = Path(__file__).parent / "schedule.html"
+PORT = 8000
+
+html_path = Path(__file__).parent / "index.html"
 irrelevant_rooms_path = Path(__file__).parent / "irrelevant_rooms.txt"
 
 task_list = {
@@ -54,6 +55,10 @@ task_list = {
     "12:00 AM": [],
     "12:30 AM": [],
     "1:00 AM": [],
+    "1:30 AM": [],
+    "2:00 AM": [],
+    "2:30 AM": [],
+    "3:00 AM": [],
 }
 
 
@@ -235,7 +240,7 @@ def filter_events(event_list):
     irrelevant_rooms = read_irrelevant_rooms()
 
     for event in event_list:
-        if event.room_id in irrelevant_rooms:
+        if event.room in irrelevant_rooms:
             event_list.remove(event)
 
 
@@ -313,10 +318,11 @@ def get_schedule() -> List[Event]:
             print(f"----------------- {i} -----------------")
             event.click() # click to see event details
             event_info = process_event_info(page) # scrape the relevant event info and save it
-            filter_events(event_info) # Filter out events that OPS do not care about
             generate_event_tasks(event_info) # create each task associated with an event
             page.get_by_role("button").get_by_text("×").click() # exit the event details page
             i += 1
+
+        filter_events(event_list)  # Filter out events that OPS do not care about
 
         browser.close()
 
@@ -373,14 +379,15 @@ def generate_event_tasks(event):
 
 def write_tasks():
     global task_list
-    json.dump(task_list, open("tasks.json", "w"), default=lambda o: o.__dict__,  indent=4)
+    json.dump(task_list, open("tasks.json", "w"), default=lambda o: o.__dict__, indent=4)
+
+
+# def start_server():
+#     handler = http.server.SimpleHTTPRequestHandler
+#     with socketserver.TCPServer(("localhost", PORT), handler) as httpd:
+#         httpd.serve_forever()
 
 
 if __name__ == "__main__":
-    # get_schedule()
-    # write_tasks()
-    # html_path = Path(__file__).parent / "schedule.html"
-    # url = html_path.resolve().as_uri()
-    # webbrowser.get("firefox").open(url)
-
-    read_irrelevant_rooms()
+    get_schedule()
+    write_tasks()

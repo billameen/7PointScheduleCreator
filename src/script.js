@@ -1,11 +1,10 @@
-console.log("running js")
 
 fetch('./tasks.json')
   .then(r => r.json())
   .then(tasks => {
 
     const template = document.getElementById("task-item-template");
-    
+
 
     console.log("starting loop")
 
@@ -15,15 +14,17 @@ fetch('./tasks.json')
         for (const task of task_list) {
             let template_clone = template.content.cloneNode(true)
 
+            console.log("room num: " + task.room)
+
             template_clone.querySelector(".room-number").textContent = task.room;
             if ( task.more_info != null ) template_clone.querySelector(".setup-desc").textContent = `- ${task.more_info}`;
-            
+
             const task_list_node = time_node.querySelector(`.${task.type}>.task-items`);
             task_list_node.appendChild(template_clone)
-            
+
         }
 
     }
-      
+
 });
 

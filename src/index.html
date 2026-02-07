@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <title>7 Point Ops Schedule</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script type="module" src="script.js" defer></script>
-
-
+    <script src="script.js" type="module"></script>
 </head>
 <body class="bg-slate-950">
 
@@ -349,17 +347,52 @@
                     <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
                     <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
                 </div>
+                <div id="1:30 AM" class="time_slot contents">
+                    <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">1:00 AM</div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
+                </div>
+                <div id="2:00 AM" class="time_slot contents">
+                    <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">1:00 AM</div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
+                </div>
+                <div id="2:30 AM" class="time_slot contents">
+                    <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">1:00 AM</div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
+                </div>
+                <div id="3:00 AM" class="time_slot contents">
+                    <div class="time_label border-b-1 border-indigo-400 p-5 text-right text-lg font-bold">1:00 AM</div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 unlock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 greet"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 reset"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 lock"><div class="flex-row task-items"></div></div>
+                    <div class="task col-span-2 px-2 py-5 border-b-1 border-indigo-400 other"><div class="flex-row task-items"></div></div>
+                </div>
             </div>
         </div>
     </div>
 
+
+
+    <template id="task-item-template">
+        <div class="task-item bg-blue-400/50 m-1 px-2 rounded-sm border-2 border-blue-400">
+            <a class="room-number font-bold"></a>
+            <a class="setup-desc"></a>
+        </div>
+    </template>
 </body>
 
-<template id="task-item-template">
-    <div class="task-item bg-blue-400/50 m-1 px-2 rounded-sm border-2 border-blue-400">
-        <a class="room-number font-bold"></a>
-        <a class="setup-desc"></a>
-    </div>
-</template>
+
 
 </html>
