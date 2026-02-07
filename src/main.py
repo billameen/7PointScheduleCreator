@@ -305,24 +305,24 @@ def generate_event_tasks(event, irrelevant_rooms):
     # Unlock
     unlock_task.time = calc_unlock_time(event)
     unlock_task.room = event.room
-    unlock_task.type = "Unlock"
+    unlock_task.type = "unlock"
 
 
     # Greet
     greet_task.time = event.start_time
     greet_task.room = event.room
-    greet_task.type = "Greet"
+    greet_task.type = "greet"
 
     # Reset
     reset_task.time = event.end_time
     reset_task.room = event.room
-    reset_task.type = "Reset"
+    reset_task.type = "reset"
     reset_task.more_info = event.setup_desc
 
     # Lock
     lock_task.time = event.end_time
     lock_task.room = event.room
-    lock_task.type = "Lock"
+    lock_task.type = "lock"
 
     task_list[unlock_task.time].append(unlock_task)
     task_list[greet_task.time].append(greet_task)
@@ -379,12 +379,6 @@ def get_schedule() -> List[Event]:
 def write_tasks():
     global task_list
     json.dump(task_list, open("tasks.json", "w"), default=lambda o: o.__dict__, indent=4)
-
-
-# def start_server():
-#     handler = http.server.SimpleHTTPRequestHandler
-#     with socketserver.TCPServer(("localhost", PORT), handler) as httpd:
-#         httpd.serve_forever()
 
 
 if __name__ == "__main__":
