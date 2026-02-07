@@ -7,6 +7,9 @@ from dotenv import load_dotenv, find_dotenv
 from playwright.sync_api import sync_playwright
 import pendulum
 from pathlib import Path
+import webbrowser
+import http.server
+import socketserver
 
 PORT = 8000
 
@@ -384,3 +387,20 @@ def write_tasks():
 if __name__ == "__main__":
     get_schedule()
     write_tasks()
+
+    # 2) Start server
+    handler = http.server.SimpleHTTPRequestHandler
+    httpd = socketserver.TCPServer(("localhost", PORT), handler)
+
+    # 3) Open browser
+    webbrowser.open("http://localhost:8000")
+
+    print("Serving at http://localhost:8000")
+    print("Press Ctrl+C to stop")
+
+    # 4) Keep server running
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nShutting down server...")
+        httpd.shutdown()
