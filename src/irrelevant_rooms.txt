@@ -29,4 +29,7 @@ AACC Gold Conference Room,
 Memorial Belltower-Henry Square,
 BR-Currituck-Hatteras Ballroom,
 BR-Piedmont-Mountains Ballroom,
-BR-Pre Function
+BR-Mountains Ballroom,
+BR-Pre Function South,
+BR-Pre Function,
+Wolf Plaza 01-Public Speaker
