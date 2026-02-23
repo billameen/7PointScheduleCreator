@@ -84,9 +84,8 @@ def parse_time_12h(time_str, tz="local"):
     for fmt in TIME_FORMATS:
         try:
             return pendulum.from_format(time_str, fmt, tz=tz)
-        except Exception:
+        except Exception as e:
             pass
-
     raise ValueError(f"Invalid time format: {time_str}")
 
 
@@ -101,11 +100,11 @@ class Event:
     error: Optional[str] = None
 
     def print(self):
-        print(self.room)
-        print(self.setup_desc)
-        print(self.start_time)
-        print(self.end_time)
-        print(self.access_time)
+        print("Room: ", self.room)
+        print("Setup: ", self.setup_desc)
+        print("Start time: ", self.start_time)
+        print("End time: ", self.end_time)
+        print("Access time: ", self.access_time)
         print(self.error)
 
 
@@ -126,7 +125,7 @@ def set_event_room_num(event, page):
     if page.locator(".roomDesc").count() > 0:
         room_num = page.locator(".roomDesc").inner_text()
         event.room = room_num
-        print("room: ", event.room)
+        # print("room: ", event.room)
     else:
         event.room = None
         event.error = "No room number"
@@ -137,20 +136,20 @@ def set_event_setup_desc(event, page):
     if page.locator("h3").count() > 0:
         header_info = page.locator("h3").inner_text()
         event.setup_desc = get_setup_desc(header_info)
-        print("setup desc: ", event.setup_desc)
+        #print("setup desc: ", event.setup_desc)
     else:
         event.setup_desc = None
         event.error = "No setup description"
-        print("setup desc: None")
+        #print("setup desc: None")
 
 
 def set_event_time(event, page):
     if page.locator(".groupDetails>dl").count() > 0:
         time_info = get_event_time(page.locator(".groupDetails>dl").first.inner_html())
         event.start_time = time_info[0]
-        print("start time: ", event.start_time)
+        #print("start time: ", event.start_time)
         event.end_time = time_info[1]
-        print("end time: ", event.end_time)
+        #print("end time: ", event.end_time)
     else:
         event.start_time = None
         event.end_time = None
@@ -162,11 +161,11 @@ def set_event_access_time(event, page):
     if page.get_by_text('Access Time').count() > 0:
         access_time = get_access_time(page)
         event.access_time = access_time
-        print("access time: ", event.access_time)
+        #print("access time: ", event.access_time)
     else:
         event.access_time = None
         event.error = "No access time"
-        print("access time: None")
+        #print("access time: None")
 
 
 
@@ -213,14 +212,13 @@ def get_access_time(page):
 
 
 def calc_unlock_time(event):
-
     if event.access_time is not None:
         t = parse_time_12h(event.access_time)
         rounded_t = (
             t.start_of("hour")
             .add(minutes=(t.minute // 30) * 30)
         )
-        rounded_t.subtract(minutes=30)
+        rounded_t = rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
 
     else:
@@ -229,8 +227,17 @@ def calc_unlock_time(event):
             t.start_of("hour")
             .add(minutes=(t.minute // 30) * 30)
         )
-        rounded_t.subtract(minutes=30)
+        rounded_t = rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
+
+
+def calc_greet_time(event):
+    if event.access_time is not None:
+        t = parse_time_12h(event.access_time)
+        return t.format("h:mm A")
+    else:
+        t = parse_time_12h(event.start_time)
+        return t.format("h:mm A")
 
 
 def read_irrelevant_rooms():
@@ -241,20 +248,38 @@ def read_irrelevant_rooms():
     return contents
 
 
-
 def round_event_times(event):
-    if event.start_time is not None:
-        t = parse_time_12h(event.start_time)
-        rounded_t = (t.start_of("hour").add(minutes=(t.minute // 30) * 30)).format("h:mm A")
-        event.start_time = rounded_t
-    if event.access_time is not None:
-        t = parse_time_12h(event.access_time)
-        rounded_t = (t.start_of("hour").add(minutes=(t.minute // 30) * 30)).format("h:mm A")
-        event.access_time = rounded_t
-    if event.end_time is not None:
-        t = parse_time_12h(event.end_time)
-        rounded_t = (t.start_of("hour").add(minutes=-(-t.minute // 30) * 30)).format("h:mm A")
-        event.end_time = rounded_t
+    try:
+        if event.start_time is not None:
+            t = parse_time_12h(event.start_time)
+            rounded_t = (t.start_of("hour").add(minutes=(t.minute // 30) * 30)).format("h:mm A")
+            event.start_time = rounded_t
+        if event.access_time is not None:
+            t = parse_time_12h(event.access_time)
+            rounded_t = (t.start_of("hour").add(minutes=(t.minute // 30) * 30)).format("h:mm A")
+            event.access_time = rounded_t
+        if event.end_time is not None:
+            t = parse_time_12h(event.end_time)
+            rounded_t = (t.start_of("hour").add(minutes=-(-t.minute // 30) * 30)).format("h:mm A")
+            event.end_time = rounded_t
+    except Exception as e:
+        print("Something went wrong when rounding event times", e)
+
+def write_tasks():
+    global task_list
+    json.dump(task_list, open("tasks.json", "w"), default=lambda o: o.__dict__, indent=4)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def process_event_info(page):
@@ -270,17 +295,32 @@ def process_event_info(page):
         page.locator("#ngplus-overlay-container").wait_for(state="hidden")
 
         set_event_room_num(event, page)
-        set_event_setup_desc(event, page)
+        print("Event room:", event.room)
         set_event_time(event, page)
+        print("Event start time:", event.start_time)
+        print("Event end time:", event.end_time)
         set_event_access_time(event, page)
+        print("Event access time:", event.access_time)
         round_event_times(event)
-
-
+        print("Event rounded start time:", event.start_time)
+        print("Event rounded end time:", event.end_time)
+        print("Event rounded access time:", event.access_time)
+        set_event_setup_desc(event, page)
+        print("Event setup:", event.setup_desc)
+        # event.print()
 
         return event
 
     except Exception as e:
         print("There was an error processing an event: ", e)
+
+
+
+
+
+
+
+
 
 
 # Event example:    Event(room, setup_desc, start_time, end_time, access_time, error)
@@ -312,7 +352,7 @@ def generate_event_tasks(event, irrelevant_rooms):
 
 
     # Greet
-    greet_task.time = event.start_time
+    greet_task.time = calc_greet_time(event)
     greet_task.room = event.room
     greet_task.type = "greet"
 
@@ -331,6 +371,12 @@ def generate_event_tasks(event, irrelevant_rooms):
     task_list[greet_task.time].append(greet_task)
     task_list[reset_task.time].append(reset_task)
     task_list[lock_task.time].append(lock_task)
+
+
+
+
+
+
 
 
 def get_schedule() -> List[Event]:
@@ -379,9 +425,6 @@ def get_schedule() -> List[Event]:
     return event_list
 
 
-def write_tasks():
-    global task_list
-    json.dump(task_list, open("tasks.json", "w"), default=lambda o: o.__dict__, indent=4)
 
 
 if __name__ == "__main__":
