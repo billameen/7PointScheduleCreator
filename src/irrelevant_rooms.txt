@@ -43,4 +43,5 @@ BR-Coastal Ballroom,
 BR-Pre Function North,
 AACC Gallery,
 AACC Library,
-TSU Outdoor - Stafford Commons B
+Scott Courtyard,
+5th Floor Railing - Banner Space
