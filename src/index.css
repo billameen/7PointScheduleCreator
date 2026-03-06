@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap');
+
+:root {
+    --bg-color: #030712;
+    --card-bg: rgba(17, 24, 39, 0.7);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --accent-color: #6366f1;
+    --accent-glow: rgba(99, 102, 241, 0.2);
+
+    --unlock-color: #10b981;
+    --greet-color: #3b82f6;
+    --reset-color: #f59e0b;
+    --lock-color: #ef4444;
+    --other-color: #8b5cf6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image:
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+header {
+    max-width: 1400px;
+    margin: 0 auto 3rem auto;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+.schedule-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.schedule-header {
+    display: grid;
+    grid-template-columns: 100px repeat(5, 1fr);
+    background: rgba(31, 41, 55, 0.8);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(20px);
+}
+
+.header-cell {
+    padding: 1.25rem 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    text-align: center;
+    border-right: 1px solid var(--border-color);
+}
+
+.header-cell:last-child {
+    border-right: none;
+}
+
+.time-row {
+    display: grid;
+    grid-template-columns: 100px repeat(5, 1fr);
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+.time-row:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.time-cell {
+    padding: 1.5rem 1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    text-align: right;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.task-cell {
+    padding: 0.75rem;
+    border-right: 1px solid var(--border-color);
+    min-height: 80px;
+}
+
+.task-cell:last-child {
+    border-right: none;
+}
+
+.task-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.task-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    font-size: 0.85rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+}
+
+.task-item:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.room-number {
+    display: block;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.setup-desc {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+/* Color markers for task types */
+.task-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent-color);
+}
+
+.unlock .task-item::before {
+    background: var(--unlock-color);
+}
+
+.greet .task-item::before {
+    background: var(--greet-color);
+}
+
+.reset .task-item::before {
+    background: var(--reset-color);
+}
+
+.lock .task-item::before {
+    background: var(--lock-color);
+}
+
+.other .task-item::before {
+    background: var(--other-color);
+}
+
+.unlock .task-item:hover {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
+}
+
+.greet .task-item:hover {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+}
+
+.reset .task-item:hover {
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.1);
+}
+
+.lock .task-item:hover {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+}
+
+.other .task-item:hover {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+}
+
+.current-time {
+    background-color: rgba(99, 102, 241, 0.1) !important;
+    border-left: 4px solid var(--accent-color);
+}
+
+.current-time .time-cell {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+@media (max-width: 1024px) {
+    body {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .schedule-header,
+    .time-row {
+        grid-template-columns: 80px repeat(5, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .schedule-header {
+        display: none;
+    }
+
+    .time-row {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .time-cell {
+        border-right: none;
+        border-bottom: 2px solid var(--accent-color);
+        justify-content: flex-start;
+        padding: 0.5rem 0;
+    }
+
+    .task-cell {
+        border-right: none;
+        padding: 0;
+        min-height: auto;
+    }
+
+    .task-cell::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.05em;
+    }
+}
