@@ -220,7 +220,7 @@ h1 {
 
 .current-time {
     background-color: rgba(99, 102, 241, 0.1) !important;
-    border-left: 4px solid var(--accent-color);
+    /*border-left: 4px solid var(--accent-color);*/
 }
 
 .current-time .time-cell {
