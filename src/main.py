@@ -97,6 +97,7 @@ class Event:
     start_time: Optional[str] = None
     end_time: Optional[str] = None
     access_time: Optional[str] = None
+    catering_access_time: Optional[str] = None
     error: Optional[str] = None
 
     def print(self):
@@ -105,6 +106,7 @@ class Event:
         print("Start time: ", self.start_time)
         print("End time: ", self.end_time)
         print("Access time: ", self.access_time)
+        print("Catering access time: ", self.catering_access_time)
         print(self.error)
 
 
@@ -158,14 +160,21 @@ def set_event_time(event, page):
 
 
 def set_event_access_time(event, page):
-    if page.get_by_text('Access Time').count() > 0:
+    num_access_times = page.get_by_text('Access Time').count()
+    if num_access_times > 1:
+        catering_access_time = get_catering_access_time(page)
         access_time = get_access_time(page)
         event.access_time = access_time
-        #print("access time: ", event.access_time)
+        event.catering_access_time = catering_access_time
+        # print("access time: ", event.access_time)
+    elif num_access_times == 1:
+        access_time = get_access_time(page)
+        event.access_time = access_time
+        event.catering_access_time = None
     else:
         event.access_time = None
         event.error = "No access time"
-        #print("access time: None")
+        print("access time: None")
 
 
 
@@ -200,7 +209,7 @@ def get_event_time(desc: str) -> Tuple[str, str]:
 
 def get_access_time(page):
     try:
-        access_time_html = page.get_by_text("Access Time").inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
+        access_time_html = page.get_by_text("Access Time").filter(has_not_text=re.compile("catering|rave", re.I)).inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
         access_time = re.search(time_pattern, access_time_html).group()
 
         assert access_time_html and access_time_html.strip() != '', f'Invalid event access time: {access_time_html}'
@@ -210,8 +219,28 @@ def get_access_time(page):
     except Exception as e:
         raise e
 
+def get_catering_access_time(page):
+    try:
+        catering_access_time_html = page.get_by_text("Access Time").filter(has_text=re.compile("catering|rave", re.I)).last.inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
+        catering_access_time = re.search(time_pattern, catering_access_time_html).group()
+        assert catering_access_time_html and catering_access_time_html.strip() != '', f'Invalid event access time: {catering_access_time_html}'
+        return catering_access_time
+
+    except Exception as e:
+        raise e
+
 
 def calc_unlock_time(event):
+
+    if event.catering_access_time is not None:
+        t = parse_time_12h(event.catering_access_time)
+        rounded_t = (
+            t.start_of("hour")
+            .add(minutes=(t.minute // 30) * 30)
+        )
+        rounded_t = rounded_t.subtract(minutes=30)
+        return rounded_t.format("h:mm A")
+
     if event.access_time is not None:
         t = parse_time_12h(event.access_time)
         rounded_t = (
@@ -262,6 +291,10 @@ def round_event_times(event):
             t = parse_time_12h(event.end_time)
             rounded_t = (t.start_of("hour").add(minutes=-(-t.minute // 30) * 30)).format("h:mm A")
             event.end_time = rounded_t
+        if event.catering_access_time is not None:
+            t = parse_time_12h(event.catering_access_time)
+            rounded_t = (t.start_of("hour").add(minutes=(t.minute // 30) * 30)).format("h:mm A")
+            event.catering_access_time = rounded_t
     except Exception as e:
         print("Something went wrong when rounding event times", e)
 
@@ -301,10 +334,12 @@ def process_event_info(page):
         print("Event end time:", event.end_time)
         set_event_access_time(event, page)
         print("Event access time:", event.access_time)
+        print("Catering access time:", event.catering_access_time)
         round_event_times(event)
         print("Event rounded start time:", event.start_time)
         print("Event rounded end time:", event.end_time)
         print("Event rounded access time:", event.access_time)
+        print("Event rounded catering time: ", event.catering_access_time)
         set_event_setup_desc(event, page)
         print("Event setup:", event.setup_desc)
         # event.print()
