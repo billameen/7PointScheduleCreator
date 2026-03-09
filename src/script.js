@@ -70,5 +70,14 @@ function highlightCurrentTime() {
     }
 }
 
+// clicking a task will strike it out
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("task-item")) {
+      e.target.classList.toggle("done");
+      console.log("task clicked");
+    }
+  });
+
+
 // Initialize
 document.addEventListener('DOMContentLoaded', loadTasks);

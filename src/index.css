@@ -14,6 +14,7 @@
     --reset-color: #f59e0b;
     --lock-color: #ef4444;
     --other-color: #8b5cf6;
+    --done-color: #595959;
 }
 
 * {
@@ -198,6 +199,10 @@ h1 {
     background: var(--other-color);
 }
 
+.done .task-item::before {
+    background: var(--done-color);
+}
+
 .unlock .task-item:hover {
     box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
 }
@@ -215,6 +220,10 @@ h1 {
 }
 
 .other .task-item:hover {
+    box-shadow: 0 0 15px rgba(89, 89, 89, 0.1);
+}
+
+.done .task-item:hover {
     box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
 }
 
