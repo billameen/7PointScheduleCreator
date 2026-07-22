@@ -14,6 +14,7 @@
     --reset-color: #f59e0b;
     --lock-color: #ef4444;
     --other-color: #8b5cf6;
+    --done-color: #595959;
 }
 
 * {
@@ -141,7 +142,7 @@ h1 {
     border-radius: 0.75rem;
     font-size: 0.85rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: default;
+    cursor: pointer;
     position: relative;
     overflow: hidden;
 }
@@ -215,7 +216,7 @@ h1 {
 }
 
 .other .task-item:hover {
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 15px rgba(89, 89, 89, 0.1);
 }
 
 .current-time {
@@ -277,4 +278,21 @@ h1 {
         margin-bottom: 0.5rem;
         letter-spacing: 0.05em;
     }
+}
+
+.task-item.done {
+    background: rgba(89, 89, 89, 0.25);
+    border-color: rgba(89, 89, 89, 0.4);
+    color: var(--text-secondary);
+}
+
+
+.task-item.done .room-number {
+    color: var(--text-secondary);
+    text-decoration: line-through;
+}
+
+.task-item.done .setup-desc {
+    color: #6b7280;
+    text-decoration: line-through;
 }

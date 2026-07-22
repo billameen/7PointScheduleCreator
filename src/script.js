@@ -1,53 +1,58 @@
-
 async function loadTasks() {
     try {
-        const response = await fetch('./tasks.json');
-        const tasks = await response.json();
+        fetch('./tasks.json')
+            .then(response => response.json())
+            .then(tasks => {
+                const scheduleBody = document.getElementById('schedule-body');
+                scheduleBody.addEventListener('click', (e) => {
+                    const taskItem = e.target.closest('.task-item');
+                    if (taskItem) taskItem.classList.toggle('done');
+                });
+                const timeSlotTemplate = document.getElementById('time-slot-template');
+                const taskItemTemplate = document.getElementById('task-item-template');
 
-        const scheduleBody = document.getElementById('schedule-body');
-        const timeSlotTemplate = document.getElementById('time-slot-template');
-        const taskItemTemplate = document.getElementById('task-item-template');
+                // Create time slots first
+                for (const [timeLabel, taskList] of Object.entries(tasks)) {
+                    // Clone time slot template
+                    const timeSlot = timeSlotTemplate.content.cloneNode(true);
+                    const timeRow = timeSlot.querySelector('.time-row');
+                    timeRow.id = timeLabel;
 
-        // Create time slots first
-        for (const [timeLabel, taskList] of Object.entries(tasks)) {
-            // Clone time slot template
-            const timeSlot = timeSlotTemplate.content.cloneNode(true);
-            const timeRow = timeSlot.querySelector('.time-row');
-            timeRow.id = timeLabel;
+                    // Set time cell text
+                    timeSlot.querySelector('.time-cell').textContent = timeLabel;
 
-            // Set time cell text
-            timeSlot.querySelector('.time-cell').textContent = timeLabel;
+                    // Populate tasks for this time slot
+                    taskList.forEach(task => {
+                        const taskClone = taskItemTemplate.content.cloneNode(true);
+                        const taskItem = taskClone.querySelector('.task-item');
 
-            // Populate tasks for this time slot
-            taskList.forEach(task => {
-                const taskClone = taskItemTemplate.content.cloneNode(true);
+                        // Room number
+                        taskClone.querySelector('.room-number').textContent = task.room;
 
-                // Room number
-                taskClone.querySelector('.room-number').textContent = task.room;
+                        // Setup description (more_info)
+                        if (task.more_info) {
+                            taskClone.querySelector('.setup-desc').textContent = `- ${task.more_info}`;
+                        } else {
+                            taskClone.querySelector('.setup-desc').remove();
+                        }
 
-                // Setup description (more_info)
-                if (task.more_info) {
-                    taskClone.querySelector('.setup-desc').textContent = `- ${task.more_info}`;
-                } else {
-                    taskClone.querySelector('.setup-desc').remove();
+                        // Append to correct task cell based on type
+                        const taskCell = timeRow.querySelector(`.${task.type} .task-items`);
+                        if (taskCell) {
+                            taskCell.appendChild(taskClone);
+                        } else {
+                            // Fallback to 'other' if type is unknown
+                            const otherCell = timeRow.querySelector('.other .task-items');
+                            if (otherCell) otherCell.appendChild(taskClone);
+                        }
+                    });
+
+                    // Append populated time slot to schedule
+                    scheduleBody.appendChild(timeSlot);
                 }
 
-                // Append to correct task cell based on type
-                const taskCell = timeRow.querySelector(`.${task.type} .task-items`);
-                if (taskCell) {
-                    taskCell.appendChild(taskClone);
-                } else {
-                    // Fallback to 'other' if type is unknown
-                    const otherCell = timeRow.querySelector('.other .task-items');
-                    if (otherCell) otherCell.appendChild(taskClone);
-                }
+                highlightCurrentTime();
             });
-
-            // Append populated time slot to schedule
-            scheduleBody.appendChild(timeSlot);
-        }
-
-        highlightCurrentTime();
     } catch (error) {
         console.error('Error loading tasks:', error);
     }
@@ -70,5 +75,9 @@ function highlightCurrentTime() {
     }
 }
 
+function addTaskButtons() {
+    return
+}
+
 // Initialize
-document.addEventListener('DOMContentLoaded', loadTasks);
+document.addEventListener('DOMContentLoaded', loadTasks());
