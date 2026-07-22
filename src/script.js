@@ -3,9 +3,11 @@ async function loadTasks() {
         fetch('./tasks.json')
             .then(response => response.json())
             .then(tasks => {
-                console.log(tasks);
-
                 const scheduleBody = document.getElementById('schedule-body');
+                scheduleBody.addEventListener('click', (e) => {
+                    const taskItem = e.target.closest('.task-item');
+                    if (taskItem) taskItem.classList.toggle('done');
+                });
                 const timeSlotTemplate = document.getElementById('time-slot-template');
                 const taskItemTemplate = document.getElementById('task-item-template');
 
@@ -22,6 +24,7 @@ async function loadTasks() {
                     // Populate tasks for this time slot
                     taskList.forEach(task => {
                         const taskClone = taskItemTemplate.content.cloneNode(true);
+                        const taskItem = taskClone.querySelector('.task-item');
 
                         // Room number
                         taskClone.querySelector('.room-number').textContent = task.room;
