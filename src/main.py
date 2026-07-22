@@ -432,7 +432,7 @@ def get_schedule() -> List[Event]:
         page = browser.new_page()
 
         # login
-        page.goto("https://www.7pointops.com/login")
+        page.goto("https://legacy.7pointops.com/login")
         page.locator("#userName").fill(os.getenv("USERNAME"))
         page.locator("#password").fill(os.getenv("PASSWORD"))
 
@@ -441,7 +441,7 @@ def get_schedule() -> List[Event]:
 
         page.wait_for_load_state("networkidle")
         page.wait_for_timeout(3000)
-        page.goto("https://www.7pointops.com/book")
+        page.goto("https://legacy.7pointops.com/book")
         page.wait_for_selector(".eventBarText", timeout=5000)
 
         print("Number of events:", page.locator(".eventBarText").count())
