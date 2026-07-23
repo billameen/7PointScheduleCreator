@@ -428,21 +428,13 @@ def get_schedule() -> List[Event]:
     irrelevant_rooms = read_irrelevant_rooms() # get all the rooms OPS don't care about
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
-        # login
-        page.goto("https://legacy.7pointops.com/login")
-        page.locator("#userName").fill(os.getenv("USERNAME"))
-        page.locator("#password").fill(os.getenv("PASSWORD"))
+        login(page)
 
-        with page.expect_navigation():
-            page.click("#loginButton")
-
-        page.wait_for_load_state("networkidle")
-        page.wait_for_timeout(3000)
-        page.goto("https://legacy.7pointops.com/book")
-        page.wait_for_selector(".eventBarText", timeout=5000)
+        page.goto("https://7pointops.com/book")
+        page.wait_for_selector(".eventBarText", timeout=10000)
 
         print("Number of events:", page.locator(".eventBarText").count())
         i = 0
@@ -460,6 +452,15 @@ def get_schedule() -> List[Event]:
     return event_list
 
 
+def login(page):
+    page.goto("https://www.7pointops.com/sign-in")
+    page.locator("#email").fill(os.getenv("USERNAME"))
+
+    page.get_by_text("Continue").click()
+    page.locator("#password").wait_for()
+
+    page.locator("#password").fill(os.getenv("PASSWORD"))
+    page.get_by_role("button", name="Login").click()
 
 
 if __name__ == "__main__":
