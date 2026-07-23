@@ -47,4 +47,5 @@ BR-Registration Desk,
 BR-Hatteras-Ocracoke Ballroom,
 BR-Currituck Ballroom,
 Court of North Carolina,
-Display Case-Stewart North
+Display Case-Stewart North,
+Display Case-Stewart South
