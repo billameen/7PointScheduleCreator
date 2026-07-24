@@ -64,6 +64,8 @@ task_list = {
     "3:00 AM": [],
 }
 
+irrelevant_rooms = set()
+
 
 time_pattern = re.compile(
     r'\b\d{1,2}(?::\d{2})?\s?(?:a\.?m\.?|p\.?m\.?)\b',
@@ -176,6 +178,35 @@ def set_event_access_time(event, page):
         event.error = "No access time"
         print("access time: None")
 
+def get_access_time(page):
+    try:
+        access_time_html = page.get_by_text("Access Time").filter(has_not_text=re.compile("catering|rave", re.I)).inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
+        access_time = re.search(time_pattern, access_time_html).group()
+
+        assert access_time_html and access_time_html.strip() != '', f'Invalid event access time: {access_time_html}'
+
+        return access_time
+
+    except Exception as e:
+        raise e
+
+def get_catering_access_time(page):
+    try:
+        catering_access_time_html = page.get_by_text("Access Time").filter(has_text=re.compile("catering|rave", re.I)).last.inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
+        catering_access_time = re.search(time_pattern, catering_access_time_html).group()
+        assert catering_access_time_html and catering_access_time_html.strip() != '', f'Invalid event access time: {catering_access_time_html}'
+        return catering_access_time
+
+    except Exception as e:
+        raise e
+
+
+
+
+
+
+
+
 
 
 # Expected input: Med Deli Catering Meeting - Talley Student Union - 3220 - (Conference, 5, act. 0)
@@ -205,29 +236,6 @@ def get_event_time(desc: str) -> Tuple[str, str]:
     assert re.fullmatch(time_pattern, end_time), f"Invalid end time: {end_time}"
 
     return start_time, end_time
-
-
-def get_access_time(page):
-    try:
-        access_time_html = page.get_by_text("Access Time").filter(has_not_text=re.compile("catering|rave", re.I)).inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
-        access_time = re.search(time_pattern, access_time_html).group()
-
-        assert access_time_html and access_time_html.strip() != '', f'Invalid event access time: {access_time_html}'
-
-        return access_time
-
-    except Exception as e:
-        raise e
-
-def get_catering_access_time(page):
-    try:
-        catering_access_time_html = page.get_by_text("Access Time").filter(has_text=re.compile("catering|rave", re.I)).last.inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
-        catering_access_time = re.search(time_pattern, catering_access_time_html).group()
-        assert catering_access_time_html and catering_access_time_html.strip() != '', f'Invalid event access time: {catering_access_time_html}'
-        return catering_access_time
-
-    except Exception as e:
-        raise e
 
 
 def calc_unlock_time(event):
@@ -270,11 +278,13 @@ def calc_greet_time(event):
 
 
 def read_irrelevant_rooms():
+    global irrelevant_rooms
     f = open(irrelevant_rooms_path, "r")
     contents = f.read()
     contents = contents.strip().split(',\n')
     f.close()
-    return contents
+    for content in contents:
+        irrelevant_rooms.add(content.strip())
 
 
 def round_event_times(event):
@@ -297,6 +307,8 @@ def round_event_times(event):
             event.catering_access_time = rounded_t
     except Exception as e:
         print("Something went wrong when rounding event times", e)
+
+
 
 def write_tasks():
     global task_list
@@ -425,7 +437,7 @@ def get_schedule() -> List[Event]:
     dotenv_path = find_dotenv()
     load_dotenv(dotenv_path)
 
-    irrelevant_rooms = read_irrelevant_rooms() # get all the rooms OPS don't care about
+    read_irrelevant_rooms() # get all the rooms OPS don't care about
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
@@ -433,19 +445,21 @@ def get_schedule() -> List[Event]:
 
         login(page)
 
-        page.goto("https://7pointops.com/book")
-        page.wait_for_selector(".eventBarText", timeout=10000)
+        load_event_table(page)
 
-        print("Number of events:", page.locator(".eventBarText").count())
-        i = 0
 
-        for event in page.locator(".eventBarText").all():
-            print(f"----------------- {i} -----------------")
-            event.click() # click to see event details
-            event_info = process_event_info(page) # scrape the relevant event info and save it
-            generate_event_tasks(event_info, irrelevant_rooms) # create each task associated with an event
-            page.get_by_role("button").get_by_text("×").click() # exit the event details page
-            i += 1
+        # print("num events:", rows.count())
+        i = 1
+
+        print(page.locator(".table-row .pointer .alt-row-color").count())
+
+        # for event in page.locator(".mat-expansion-panel-body").locator(".list-item-wrapper").all():
+        #     print(f"----------------- {i} -----------------")
+        #     event.click() # click to see event details
+        #     event_info = process_event_info(page) # scrape the relevant event info and save it
+        #     generate_event_tasks(event_info, irrelevant_rooms) # create each task associated with an event
+        #     page.get_by_role("button").get_by_text("×").click() # exit the event details page
+        #     i += 1
 
         browser.close()
 
@@ -461,6 +475,17 @@ def login(page):
 
     page.locator("#password").fill(os.getenv("PASSWORD"))
     page.get_by_role("button", name="Login").click()
+
+
+def load_event_table(page):
+    # waits for "loaded at x:xx" to appear on the Events table - this indicates that all events have loaded on the page
+    container = page.locator('sp-table-container[tablelabel="Events"]')
+    table = container.locator('.table-wrapper')
+
+    rows = table.locator("tr.table-row")
+    rows.first.wait_for(state="visible")
+
+    print("event num:", rows.count())
 
 
 if __name__ == "__main__":
