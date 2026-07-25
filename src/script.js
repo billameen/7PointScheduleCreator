@@ -1,26 +1,83 @@
+async function loadTasks() {
+    try {
+        fetch('./tasks.json')
+            .then(response => response.json())
+            .then(tasks => {
+                const scheduleBody = document.getElementById('schedule-body');
+                scheduleBody.addEventListener('click', (e) => {
+                    const taskItem = e.target.closest('.task-item');
+                    if (taskItem) taskItem.classList.toggle('done');
+                });
+                const timeSlotTemplate = document.getElementById('time-slot-template');
+                const taskItemTemplate = document.getElementById('task-item-template');
 
-fetch('./tasks.json')
-  .then(r => r.json())
-  .then(tasks => {
+                // Create time slots first
+                for (const [timeLabel, taskList] of Object.entries(tasks)) {
+                    // Clone time slot template
+                    const timeSlot = timeSlotTemplate.content.cloneNode(true);
+                    const timeRow = timeSlot.querySelector('.time-row');
+                    timeRow.id = timeLabel;
 
-    const template = document.getElementById("task-item-template");
+                    // Set time cell text
+                    timeSlot.querySelector('.time-cell').textContent = timeLabel;
 
+                    // Populate tasks for this time slot
+                    taskList.forEach(task => {
+                        const taskClone = taskItemTemplate.content.cloneNode(true);
+                        const taskItem = taskClone.querySelector('.task-item');
 
-    for ( const [time, task_list] of Object.entries(tasks)) {
-        const time_node = document.getElementById(time);
+                        // Room number
+                        taskClone.querySelector('.room-number').textContent = task.room;
 
-        for (const task of task_list) {
-            let template_clone = template.content.cloneNode(true)
+                        // Setup description (more_info)
+                        if (task.more_info) {
+                            taskClone.querySelector('.setup-desc').textContent = `- ${task.more_info}`;
+                        } else {
+                            taskClone.querySelector('.setup-desc').remove();
+                        }
 
-            template_clone.querySelector(".room-number").textContent = task.room;
-            if ( task.more_info != null ) template_clone.querySelector(".setup-desc").textContent = `- ${task.more_info}`;
+                        // Append to correct task cell based on type
+                        const taskCell = timeRow.querySelector(`.${task.type} .task-items`);
+                        if (taskCell) {
+                            taskCell.appendChild(taskClone);
+                        } else {
+                            // Fallback to 'other' if type is unknown
+                            const otherCell = timeRow.querySelector('.other .task-items');
+                            if (otherCell) otherCell.appendChild(taskClone);
+                        }
+                    });
 
-            const task_list_node = time_node.querySelector(`.${task.type}>.task-items`);
-            task_list_node.appendChild(template_clone)
+                    // Append populated time slot to schedule
+                    scheduleBody.appendChild(timeSlot);
+                }
 
-        }
-
+                highlightCurrentTime();
+            });
+    } catch (error) {
+        console.error('Error loading tasks:', error);
     }
+}
 
-});
+function highlightCurrentTime() {
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = now.getMinutes() < 30 ? "00" : "30";
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
 
+    const timeId = `${hours}:${minutes} ${ampm}`;
+    const currentRow = document.getElementById(timeId);
+
+    if (currentRow) {
+        currentRow.classList.add('current-time');
+        currentRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+function addTaskButtons() {
+    return
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', loadTasks());
