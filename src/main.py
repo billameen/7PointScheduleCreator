@@ -143,7 +143,6 @@ def set_event_setup_desc(event, event_locator):
     if setup_desc.count() > 0:
         setup_text = setup_desc.inner_html().split("(")[1].split(")")[0]
         event.setup_desc = setup_text
-        print("setup desc: ", event.setup_desc)
     else:
         event.setup_desc = None
         event.error = "No setup description"
@@ -174,28 +173,25 @@ def set_event_time(event, event_details):
 def calc_unlock_time(event):
 
     if event.catering_access_time is not None:
-        t = parse_time_12h(event.catering_access_time)
         rounded_t = (
-            t.start_of("hour")
-            .add(minutes=(t.minute // 30) * 30)
+            event.catering_access_time.start_of("hour")
+            .add(minutes=(event.catering_access_time.minute // 30) * 30)
         )
         rounded_t = rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
 
     if event.access_time is not None:
-        t = parse_time_12h(event.access_time)
         rounded_t = (
-            t.start_of("hour")
-            .add(minutes=(t.minute // 30) * 30)
+            event.access_time.start_of("hour")
+            .add(minutes=(event.access_time.minute // 30) * 30)
         )
         rounded_t = rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
 
     else:
-        t = parse_time_12h(event.start_time)
         rounded_t = (
-            t.start_of("hour")
-            .add(minutes=(t.minute // 30) * 30)
+            event.start_time.start_of("hour")
+            .add(minutes=(event.start_time.minute // 30) * 30)
         )
         rounded_t = rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
@@ -203,11 +199,9 @@ def calc_unlock_time(event):
 
 def calc_greet_time(event):
     if event.access_time is not None:
-        t = parse_time_12h(event.access_time)
-        return t.format("h:mm A")
+        return event.access_time.format("h:mm A")
     else:
-        t = parse_time_12h(event.start_time)
-        return t.format("h:mm A")
+        return event.start_time.format("h:mm A")
 
 
 def round_event_times(event):
@@ -285,6 +279,7 @@ def process_event_info(event_locator, event_details_locator):
         set_event_time(event, event_details_locator.locator(".details-grid"))
         print("Event start time:", event.start_time)
         print("Event end time:", event.end_time)
+        event.access_time = event.start_time
         # set_event_access_time(event, page)
         # print("Event access time:", event.access_time)
         # print("Catering access time:", event.catering_access_time)
@@ -341,13 +336,16 @@ def generate_event_tasks(event):
     greet_task.type = "greet"
 
     # Reset
-    reset_task.time = event.end_time
+    t = event.end_time
+    rounded_t = (t.start_of("hour").add(minutes=-(-t.minute // 30) * 30)).format("h:mm A")
+    reset_task.time = rounded_t
+
     reset_task.room = event.room
     reset_task.type = "reset"
     reset_task.more_info = event.setup_desc
 
     # Lock
-    lock_task.time = event.end_time
+    lock_task.time = rounded_t
     lock_task.room = event.room
     lock_task.type = "lock"
 
@@ -363,12 +361,12 @@ def generate_event_tasks(event):
 
 
 
-def get_schedule() -> List[Event]:
+def get_schedule():
     """
     Scan 7PointOps Book page and retrieve data for each event happening on the current day
     :return: a list of events
     """
-    event_list = []
+    # event_list = []
 
     # load username and password
     dotenv_path = find_dotenv()
@@ -390,12 +388,12 @@ def get_schedule() -> List[Event]:
             event_info = process_event_info(event, event_details) # scrape the relevant event info and save it
             # generate_event_tasks(event_info, irrelevant_rooms) # create each task associated with an event
             i += 1
-            event_list.append(event_info)
-
+            generate_event_tasks(event_info)
+            # event_list.append(event_info)
 
         browser.close()
 
-    return event_list
+    # return event_list
 
 
 def login(page):
