@@ -64,6 +64,8 @@ task_list = {
     "3:00 AM": [],
 }
 
+irrelevant_rooms = set()
+
 
 time_pattern = re.compile(
     r'\b\d{1,2}(?::\d{2})?\s?(?:a\.?m\.?|p\.?m\.?)\b',
@@ -123,10 +125,11 @@ class Task:
 
 
 
-def set_event_room_num(event, page):
-    if page.locator(".roomDesc").count() > 0:
-        room_num = page.locator(".roomDesc").inner_text()
-        event.room = room_num
+def set_event_room_num(event, event_locator):
+    room_num = event_locator.locator(".mat-column-event")
+    room_num.wait_for(state="visible", timeout=2000)
+    if room_num.count() == 1:
+        event.room = event_locator.locator(".mat-column-event").locator("b").inner_html().strip()
         # print("room: ", event.room)
     else:
         event.room = None
@@ -134,24 +137,30 @@ def set_event_room_num(event, page):
         raise Exception("No room number") # Having no room number is fatal. An event should not be processed if it doesn't have a room number.
 
 
-def set_event_setup_desc(event, page):
-    if page.locator("h3").count() > 0:
-        header_info = page.locator("h3").inner_text()
-        event.setup_desc = get_setup_desc(header_info)
-        #print("setup desc: ", event.setup_desc)
+def set_event_setup_desc(event, event_locator):
+    setup_desc = event_locator.locator(".mat-column-event")
+    setup_desc.wait_for(state="visible", timeout=2000)
+    if setup_desc.count() > 0:
+        setup_text = setup_desc.inner_html().split("(")[1].split(")")[0]
+        event.setup_desc = setup_text
     else:
         event.setup_desc = None
         event.error = "No setup description"
         #print("setup desc: None")
 
 
-def set_event_time(event, page):
-    if page.locator(".groupDetails>dl").count() > 0:
-        time_info = get_event_time(page.locator(".groupDetails>dl").first.inner_html())
-        event.start_time = time_info[0]
-        #print("start time: ", event.start_time)
-        event.end_time = time_info[1]
-        #print("end time: ", event.end_time)
+def set_event_time(event, event_details):
+    customer_access = event_details.locator('sp-details-row[label="Customer Access"]')
+    customer_access.wait_for(state="visible", timeout=2000)
+
+    if customer_access.count() == 1:
+        time_info = customer_access.locator("span.detail-data").inner_text().split("-")
+
+        start_time, end_time = time_info[0].strip(), time_info[1].strip()
+
+        event.start_time = parse_time_12h(start_time)
+        event.end_time = parse_time_12h(end_time)
+
     else:
         event.start_time = None
         event.end_time = None
@@ -159,102 +168,30 @@ def set_event_time(event, page):
         raise Exception("No start time or end time") # Having no start or end times is fatal. An event should not be processed if it doesn't have this information
 
 
-def set_event_access_time(event, page):
-    num_access_times = page.get_by_text('Access Time').count()
-    if num_access_times > 1:
-        catering_access_time = get_catering_access_time(page)
-        access_time = get_access_time(page)
-        event.access_time = access_time
-        event.catering_access_time = catering_access_time
-        # print("access time: ", event.access_time)
-    elif num_access_times == 1:
-        access_time = get_access_time(page)
-        event.access_time = access_time
-        event.catering_access_time = None
-    else:
-        event.access_time = None
-        event.error = "No access time"
-        print("access time: None")
-
-
-
-# Expected input: Med Deli Catering Meeting - Talley Student Union - 3220 - (Conference, 5, act. 0)
-# Expected output: Conference, 5
-def get_setup_desc(desc: str) -> str:
-    """
-    Gets the setup description (i.e. Conference 15, Classroom 40, etc.)
-    :param desc: the heading (<h3>) of the event description
-    """
-    setup = desc.split('(')[1].split(', act.')[0].strip()
-    return setup
-
-
-def get_event_time(desc: str) -> Tuple[str, str]:
-    """
-    Gets the start and end time of the event
-    :param desc: HTML code containing the event start and end time. This is expected in a very specific format
-    :return: (start time, end time)
-    """
-    start_time = desc.split('Event Start')[1].strip().split('Event End')[0].strip()
-    end_time = desc.split('Event End')[1].strip().split('Reserved End')[0].strip()
-
-    start_time = start_time.split('-->')[1].split('<!--')[0].strip()
-    end_time = end_time.split('-->')[1].split('<!--')[0].strip()
-
-    assert re.fullmatch(time_pattern, start_time), f"Invalid start time: {start_time}"
-    assert re.fullmatch(time_pattern, end_time), f"Invalid end time: {end_time}"
-
-    return start_time, end_time
-
-
-def get_access_time(page):
-    try:
-        access_time_html = page.get_by_text("Access Time").filter(has_not_text=re.compile("catering|rave", re.I)).inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
-        access_time = re.search(time_pattern, access_time_html).group()
-
-        assert access_time_html and access_time_html.strip() != '', f'Invalid event access time: {access_time_html}'
-
-        return access_time
-
-    except Exception as e:
-        raise e
-
-def get_catering_access_time(page):
-    try:
-        catering_access_time_html = page.get_by_text("Access Time").filter(has_text=re.compile("catering|rave", re.I)).last.inner_html(timeout=1000).split('<p class="preWrap indent">')[1].strip().split('</p>')[0].strip()
-        catering_access_time = re.search(time_pattern, catering_access_time_html).group()
-        assert catering_access_time_html and catering_access_time_html.strip() != '', f'Invalid event access time: {catering_access_time_html}'
-        return catering_access_time
-
-    except Exception as e:
-        raise e
 
 
 def calc_unlock_time(event):
 
     if event.catering_access_time is not None:
-        t = parse_time_12h(event.catering_access_time)
         rounded_t = (
-            t.start_of("hour")
-            .add(minutes=(t.minute // 30) * 30)
+            event.catering_access_time.start_of("hour")
+            .add(minutes=(event.catering_access_time.minute // 30) * 30)
         )
         rounded_t = rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
 
     if event.access_time is not None:
-        t = parse_time_12h(event.access_time)
         rounded_t = (
-            t.start_of("hour")
-            .add(minutes=(t.minute // 30) * 30)
+            event.access_time.start_of("hour")
+            .add(minutes=(event.access_time.minute // 30) * 30)
         )
         rounded_t = rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
 
     else:
-        t = parse_time_12h(event.start_time)
         rounded_t = (
-            t.start_of("hour")
-            .add(minutes=(t.minute // 30) * 30)
+            event.start_time.start_of("hour")
+            .add(minutes=(event.start_time.minute // 30) * 30)
         )
         rounded_t = rounded_t.subtract(minutes=30)
         return rounded_t.format("h:mm A")
@@ -262,19 +199,9 @@ def calc_unlock_time(event):
 
 def calc_greet_time(event):
     if event.access_time is not None:
-        t = parse_time_12h(event.access_time)
-        return t.format("h:mm A")
+        return event.access_time.format("h:mm A")
     else:
-        t = parse_time_12h(event.start_time)
-        return t.format("h:mm A")
-
-
-def read_irrelevant_rooms():
-    f = open(irrelevant_rooms_path, "r")
-    contents = f.read()
-    contents = contents.strip().split(',\n')
-    f.close()
-    return contents
+        return event.start_time.format("h:mm A")
 
 
 def round_event_times(event):
@@ -298,10 +225,20 @@ def round_event_times(event):
     except Exception as e:
         print("Something went wrong when rounding event times", e)
 
+
+
 def write_tasks():
     global task_list
     json.dump(task_list, open("tasks.json", "w"), default=lambda o: o.__dict__, indent=4)
 
+def read_irrelevant_rooms():
+    global irrelevant_rooms
+    f = open(irrelevant_rooms_path, "r")
+    contents = f.read()
+    contents = contents.strip().split(',\n')
+    f.close()
+    for content in contents:
+        irrelevant_rooms.add(content.strip())
 
 
 
@@ -314,35 +251,45 @@ def write_tasks():
 
 
 
-
-def process_event_info(page):
+def process_event_info(event_locator, event_details_locator):
     """
-    Extract event info from the 7PointOps Event Details HTML page.
+    Extract event info from the 7PointOps Daily Setup event page.
     If an error occurs, the event's error field is populated with the Exception
-    :param page: the webpage containing the event details
+    :param event_locator: the html component containing the event room number
+    :param event_details_locator: the html component containing all event details (start time, end time, access time, etc.)
     :return: an Event dataclass object
     """
+    global irrelevant_rooms
+
     event = Event()
     try:
-        # make sure page has loaded
-        page.locator("#ngplus-overlay-container").wait_for(state="hidden")
 
-        set_event_room_num(event, page)
+
+        set_event_room_num(event, event_locator)
         print("Event room:", event.room)
-        set_event_time(event, page)
+
+        if event.room in irrelevant_rooms:
+            print("Irrelevant room!")
+            return None
+
+        event_locator.click()
+        event_details_locator.get_by_text("Event Details").click()
+
+
+        set_event_time(event, event_details_locator.locator(".details-grid"))
         print("Event start time:", event.start_time)
         print("Event end time:", event.end_time)
-        set_event_access_time(event, page)
-        print("Event access time:", event.access_time)
-        print("Catering access time:", event.catering_access_time)
-        round_event_times(event)
-        print("Event rounded start time:", event.start_time)
-        print("Event rounded end time:", event.end_time)
-        print("Event rounded access time:", event.access_time)
-        print("Event rounded catering time: ", event.catering_access_time)
-        set_event_setup_desc(event, page)
+        event.access_time = event.start_time
+        # set_event_access_time(event, page)
+        # print("Event access time:", event.access_time)
+        # print("Catering access time:", event.catering_access_time)
+        # round_event_times(event)
+        # print("Event rounded start time:", event.start_time)
+        # print("Event rounded end time:", event.end_time)
+        # print("Event rounded access time:", event.access_time)
+        # print("Event rounded catering time: ", event.catering_access_time)
+        set_event_setup_desc(event, event_locator)
         print("Event setup:", event.setup_desc)
-        # event.print()
 
         return event
 
@@ -360,18 +307,15 @@ def process_event_info(page):
 
 # Event example:    Event(room, setup_desc, start_time, end_time, access_time, error)
 #                   Event('4265', 'Conference, 12', '6:30 PM', '8:00 PM', '6pm', None)
-def generate_event_tasks(event, irrelevant_rooms):
+def generate_event_tasks(event):
     """
     Based on an event, generates a list of associated tasks
     :return:
     """
     if event is None:
         return
-    else:
-        if event.room is None or event.start_time is None or event.end_time is None:
-            return
-        if event.room in irrelevant_rooms:
-            return
+    if event.room is None or event.start_time is None or event.end_time is None:
+        return
 
     global task_list
 
@@ -392,13 +336,16 @@ def generate_event_tasks(event, irrelevant_rooms):
     greet_task.type = "greet"
 
     # Reset
-    reset_task.time = event.end_time
+    t = event.end_time
+    rounded_t = (t.start_of("hour").add(minutes=-(-t.minute // 30) * 30)).format("h:mm A")
+    reset_task.time = rounded_t
+
     reset_task.room = event.room
     reset_task.type = "reset"
     reset_task.more_info = event.setup_desc
 
     # Lock
-    lock_task.time = event.end_time
+    lock_task.time = rounded_t
     lock_task.room = event.room
     lock_task.type = "lock"
 
@@ -414,52 +361,64 @@ def generate_event_tasks(event, irrelevant_rooms):
 
 
 
-def get_schedule() -> List[Event]:
+def get_schedule():
     """
     Scan 7PointOps Book page and retrieve data for each event happening on the current day
     :return: a list of events
     """
-    event_list = []
+    # event_list = []
 
     # load username and password
     dotenv_path = find_dotenv()
     load_dotenv(dotenv_path)
 
-    irrelevant_rooms = read_irrelevant_rooms() # get all the rooms OPS don't care about
+    read_irrelevant_rooms() # get all the rooms OPS don't care about
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
-        # login
-        page.goto("https://legacy.7pointops.com/login")
-        page.locator("#userName").fill(os.getenv("USERNAME"))
-        page.locator("#password").fill(os.getenv("PASSWORD"))
+        login(page)
 
-        with page.expect_navigation():
-            page.click("#loginButton")
+        eventLocator, eventDetailsLocator = load_event_table(page)
 
-        page.wait_for_load_state("networkidle")
-        page.wait_for_timeout(3000)
-        page.goto("https://legacy.7pointops.com/book")
-        page.wait_for_selector(".eventBarText", timeout=5000)
-
-        print("Number of events:", page.locator(".eventBarText").count())
         i = 0
-
-        for event in page.locator(".eventBarText").all():
+        for event, event_details in zip(eventLocator.all(), eventDetailsLocator.all()):
             print(f"----------------- {i} -----------------")
-            event.click() # click to see event details
-            event_info = process_event_info(page) # scrape the relevant event info and save it
-            generate_event_tasks(event_info, irrelevant_rooms) # create each task associated with an event
-            page.get_by_role("button").get_by_text("×").click() # exit the event details page
+            event_info = process_event_info(event, event_details) # scrape the relevant event info and save it
+            # generate_event_tasks(event_info, irrelevant_rooms) # create each task associated with an event
             i += 1
+            generate_event_tasks(event_info)
+            # event_list.append(event_info)
 
         browser.close()
 
-    return event_list
+    # return event_list
 
 
+def login(page):
+    page.goto("https://www.7pointops.com/sign-in")
+    page.locator("#email").fill(os.getenv("USERNAME"))
+
+    page.get_by_text("Continue").click()
+    page.locator("#password").wait_for()
+
+    page.locator("#password").fill(os.getenv("PASSWORD"))
+    page.get_by_role("button", name="Login").click()
+
+
+def load_event_table(page):
+    # waits for "loaded at x:xx" to appear on the Events table - this indicates that all events have loaded on the page
+    container = page.locator('sp-table-container[tablelabel="Events"]')
+    table = container.locator('.table-wrapper')
+
+    event_rows = table.locator("tr.table-row")
+    event_detail_rows = table.locator("tr.details-row")
+    event_rows.first.wait_for(state="visible")
+
+    print("event num:", event_rows.count())
+
+    return event_rows, event_detail_rows
 
 
 if __name__ == "__main__":
