@@ -125,10 +125,9 @@ class Task:
 
 
 
-def set_event_room_num(event, page):
-    if page.locator(".roomDesc").count() > 0:
-        room_num = page.locator(".roomDesc").inner_text()
-        event.room = room_num
+def set_event_room_num(event, event_locator):
+    if event_locator.locator(".mat-column-event").count() == 1:
+        event.room = event_locator.locator(".mat-column-event").locator("b").inner_html().strip()
         # print("room: ", event.room)
     else:
         event.room = None
@@ -327,34 +326,39 @@ def write_tasks():
 
 
 
-def process_event_info(page):
+def process_event_info(event_locator):
     """
-    Extract event info from the 7PointOps Event Details HTML page.
+    Extract event info from the 7PointOps Daily Setup event page.
     If an error occurs, the event's error field is populated with the Exception
-    :param page: the webpage containing the event details
+    :param event_locator: the html component containing the event details
     :return: an Event dataclass object
     """
+    global irrelevant_rooms
+
     event = Event()
     try:
-        # make sure page has loaded
-        page.locator("#ngplus-overlay-container").wait_for(state="hidden")
 
-        set_event_room_num(event, page)
+        set_event_room_num(event, event_locator)
         print("Event room:", event.room)
-        set_event_time(event, page)
-        print("Event start time:", event.start_time)
-        print("Event end time:", event.end_time)
-        set_event_access_time(event, page)
-        print("Event access time:", event.access_time)
-        print("Catering access time:", event.catering_access_time)
-        round_event_times(event)
-        print("Event rounded start time:", event.start_time)
-        print("Event rounded end time:", event.end_time)
-        print("Event rounded access time:", event.access_time)
-        print("Event rounded catering time: ", event.catering_access_time)
-        set_event_setup_desc(event, page)
-        print("Event setup:", event.setup_desc)
-        # event.print()
+
+        if event.room in irrelevant_rooms:
+            print("Irrelevant room!")
+            return None
+
+
+        # set_event_time(event, page)
+        # print("Event start time:", event.start_time)
+        # print("Event end time:", event.end_time)
+        # set_event_access_time(event, page)
+        # print("Event access time:", event.access_time)
+        # print("Catering access time:", event.catering_access_time)
+        # round_event_times(event)
+        # print("Event rounded start time:", event.start_time)
+        # print("Event rounded end time:", event.end_time)
+        # print("Event rounded access time:", event.access_time)
+        # print("Event rounded catering time: ", event.catering_access_time)
+        # set_event_setup_desc(event, page)
+        # print("Event setup:", event.setup_desc)
 
         return event
 
@@ -372,18 +376,15 @@ def process_event_info(page):
 
 # Event example:    Event(room, setup_desc, start_time, end_time, access_time, error)
 #                   Event('4265', 'Conference, 12', '6:30 PM', '8:00 PM', '6pm', None)
-def generate_event_tasks(event, irrelevant_rooms):
+def generate_event_tasks(event):
     """
     Based on an event, generates a list of associated tasks
     :return:
     """
     if event is None:
         return
-    else:
-        if event.room is None or event.start_time is None or event.end_time is None:
-            return
-        if event.room in irrelevant_rooms:
-            return
+    if event.room is None or event.start_time is None or event.end_time is None:
+        return
 
     global task_list
 
@@ -445,21 +446,17 @@ def get_schedule() -> List[Event]:
 
         login(page)
 
-        load_event_table(page)
+        eventLocator = load_event_table(page)
 
+        i = 0
+        for event in eventLocator.all():
+            print(f"----------------- {i} -----------------")
+            event.click() # click to see event details
+            event_info = process_event_info(event) # scrape the relevant event info and save it
+            # generate_event_tasks(event_info, irrelevant_rooms) # create each task associated with an event
+            i += 1
+            page.wait_for_timeout(1000)
 
-        # print("num events:", rows.count())
-        i = 1
-
-        print(page.locator(".table-row .pointer .alt-row-color").count())
-
-        # for event in page.locator(".mat-expansion-panel-body").locator(".list-item-wrapper").all():
-        #     print(f"----------------- {i} -----------------")
-        #     event.click() # click to see event details
-        #     event_info = process_event_info(page) # scrape the relevant event info and save it
-        #     generate_event_tasks(event_info, irrelevant_rooms) # create each task associated with an event
-        #     page.get_by_role("button").get_by_text("×").click() # exit the event details page
-        #     i += 1
 
         browser.close()
 
@@ -486,6 +483,8 @@ def load_event_table(page):
     rows.first.wait_for(state="visible")
 
     print("event num:", rows.count())
+
+    return rows
 
 
 if __name__ == "__main__":
