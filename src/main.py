@@ -126,7 +126,9 @@ class Task:
 
 
 def set_event_room_num(event, event_locator):
-    if event_locator.locator(".mat-column-event").count() == 1:
+    room_num = event_locator.locator(".mat-column-event")
+    room_num.wait_for(state="visible", timeout=2000)
+    if room_num.count() == 1:
         event.room = event_locator.locator(".mat-column-event").locator("b").inner_html().strip()
         # print("room: ", event.room)
     else:
@@ -135,11 +137,13 @@ def set_event_room_num(event, event_locator):
         raise Exception("No room number") # Having no room number is fatal. An event should not be processed if it doesn't have a room number.
 
 
-def set_event_setup_desc(event, page):
-    if page.locator("h3").count() > 0:
-        header_info = page.locator("h3").inner_text()
-        event.setup_desc = get_setup_desc(header_info)
-        #print("setup desc: ", event.setup_desc)
+def set_event_setup_desc(event, event_locator):
+    setup_desc = event_locator.locator(".mat-column-event")
+    setup_desc.wait_for(state="visible", timeout=2000)
+    if setup_desc.count() > 0:
+        setup_text = setup_desc.inner_html().split("(")[1].split(")")[0]
+        event.setup_desc = setup_text
+        print("setup desc: ", event.setup_desc)
     else:
         event.setup_desc = None
         event.error = "No setup description"
@@ -163,20 +167,6 @@ def set_event_time(event, event_details):
         event.end_time = None
         event.error = "No start time or end time"
         raise Exception("No start time or end time") # Having no start or end times is fatal. An event should not be processed if it doesn't have this information
-
-
-
-
-
-# Expected input: Med Deli Catering Meeting - Talley Student Union - 3220 - (Conference, 5, act. 0)
-# Expected output: Conference, 5
-def get_setup_desc(desc: str) -> str:
-    """
-    Gets the setup description (i.e. Conference 15, Classroom 40, etc.)
-    :param desc: the heading (<h3>) of the event description
-    """
-    setup = desc.split('(')[1].split(', act.')[0].strip()
-    return setup
 
 
 
@@ -303,8 +293,8 @@ def process_event_info(event_locator, event_details_locator):
         # print("Event rounded end time:", event.end_time)
         # print("Event rounded access time:", event.access_time)
         # print("Event rounded catering time: ", event.catering_access_time)
-        # set_event_setup_desc(event, page)
-        # print("Event setup:", event.setup_desc)
+        set_event_setup_desc(event, event_locator)
+        print("Event setup:", event.setup_desc)
 
         return event
 
@@ -400,7 +390,7 @@ def get_schedule() -> List[Event]:
             event_info = process_event_info(event, event_details) # scrape the relevant event info and save it
             # generate_event_tasks(event_info, irrelevant_rooms) # create each task associated with an event
             i += 1
-            page.wait_for_timeout(1000)
+            event_list.append(event_info)
 
 
         browser.close()
