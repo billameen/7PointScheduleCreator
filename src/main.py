@@ -375,7 +375,7 @@ def get_schedule():
     read_irrelevant_rooms() # get all the rooms OPS don't care about
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
 
         login(page)
@@ -397,6 +397,7 @@ def get_schedule():
 
 
 def login(page):
+    print("Logging in...")
     page.goto("https://www.7pointops.com/sign-in")
     page.locator("#email").fill(os.getenv("USERNAME"))
 
@@ -408,6 +409,7 @@ def login(page):
 
 
 def load_event_table(page):
+    print("Loading events table...")
     # waits for "loaded at x:xx" to appear on the Events table - this indicates that all events have loaded on the page
     container = page.locator('sp-table-container[tablelabel="Events"]')
     table = container.locator('.table-wrapper')
