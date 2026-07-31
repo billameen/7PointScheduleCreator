@@ -199,6 +199,10 @@ def calc_unlock_time(event):
 
 def calc_greet_time(event):
     if event.access_time is not None:
+
+        t = event.access_time
+        rounded_t = (t.start_of("hour").add(minutes=(t.minute // 30) * 30)).format("h:mm A")
+        event.access_time = rounded_t
         return event.access_time.format("h:mm A")
     else:
         return event.start_time.format("h:mm A")
