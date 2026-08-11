@@ -48,4 +48,5 @@ BR-Hatteras-Ocracoke Ballroom,
 BR-Currituck Ballroom,
 Court of North Carolina,
 Display Case-Stewart North,
-Display Case-Stewart South
+Display Case-Stewart South,
+AACC Study Room 370
