@@ -16,6 +16,8 @@ PORT = 8000
 html_path = Path(__file__).parent / "index.html"
 irrelevant_rooms_path = Path(__file__).parent / "irrelevant_rooms.txt"
 
+DEBUG = False
+
 task_list = {
     "5:00 AM": [],
     "5:30 AM": [],
@@ -81,7 +83,7 @@ TIME_FORMATS = [
 ]
 
 def parse_time_12h(time_str, tz="local"):
-    time_str = time_str.strip().upper()
+    time_str = " ".join(time_str.split()).upper()
 
     for fmt in TIME_FORMATS:
         try:
@@ -153,13 +155,22 @@ def set_event_time(event, event_details):
     customer_access = event_details.locator('sp-details-row[label="Customer Access"]')
     customer_access.wait_for(state="visible", timeout=2000)
 
+    if DEBUG:
+        print("Finding Event Time")
+
     if customer_access.count() == 1:
         time_info = customer_access.locator("span.detail-data").inner_text().split("-")
 
         start_time, end_time = time_info[0].strip(), time_info[1].strip()
 
+        if DEBUG:
+            print(f"Read event time from 7Point: '{start_time}' - '{end_time}'")
+
         event.start_time = parse_time_12h(start_time)
         event.end_time = parse_time_12h(end_time)
+
+        if DEBUG:
+            print(f"Event Time Parsed: {event.start_time} - {event.end_time}")
 
     else:
         event.start_time = None
@@ -276,8 +287,8 @@ def process_event_info(event_locator, event_details_locator):
             print("Irrelevant room!")
             return None
 
-        event_locator.click()
-        event_details_locator.get_by_text("Event Details").click()
+        event_locator.locator(".mat-column-ends").click()
+        event_details_locator.locator(".mdc-tab__text-label").get_by_text("Event Details").click()
 
 
         set_event_time(event, event_details_locator.locator(".details-grid"))
@@ -404,12 +415,15 @@ def login(page):
     print("Logging in...")
     page.goto("https://www.7pointops.com/sign-in")
     page.locator("#email").fill(os.getenv("USERNAME"))
+    # page.wait_for_timeout(3000)
 
     page.get_by_text("Continue").click()
     page.locator("#password").wait_for()
+    # page.wait_for_timeout(3000)
 
     page.locator("#password").fill(os.getenv("PASSWORD"))
     page.get_by_role("button", name="Login").click()
+    page.wait_for_url("https://www.7pointops.com/daily-setup")
 
 
 def load_event_table(page):
