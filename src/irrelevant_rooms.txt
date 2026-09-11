@@ -47,4 +47,6 @@ Display Case-Stewart North,
 Display Case-Stewart South,
 AACC Study Room 370,
 Brickyard-B Side (11-20),
-AACC Study Room 369
+AACC Study Room 369,
+AACC Study Room 368,
+AACC Podcast Studio
