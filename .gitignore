@@ -3,3 +3,4 @@
 .DS_Store
 tasks.json
 .vscode/
+__pycache__/
